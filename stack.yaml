@@ -1,0 +1,8 @@
+resolver: lts-8.19
+packages:
+- '.'
+- location:
+    git: https://github.com/mrkkrp/megaparsec.git
+    commit: fd021a85b7eb6e5883d8a5c7ad508ced2a911418
+extra-deps:
+- parser-combinators-0.1.0
