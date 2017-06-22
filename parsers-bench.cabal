@@ -57,7 +57,10 @@ benchmark bench-memory
   hs-source-dirs:     bench/memory
   type:               exitcode-stdio-1.0
   build-depends:      base
+                    , bytestring
+                    , deepseq
                     , parsers-bench
+                    , weigh
   if flag(dev)
     ghc-options:      -O2 -Wall -Werror
   else
