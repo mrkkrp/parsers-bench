@@ -24,11 +24,13 @@ flag dev
   default:            False
 
 library
-  hs-source-dirs:     src
-  build-depends:      base             >= 4.7 && < 5.0
+  build-depends:      base
                     , attoparsec
+                    , bytestring
                     , megaparsec
-  -- exposed-modules:    ParsersBench
+                    , vector
+  exposed-modules:    ParsersBench.CSV.Attoparsec
+                    , ParsersBench.CSV.Megaparsec
   if flag(dev)
     ghc-options:      -Wall -Werror
   else
@@ -39,7 +41,10 @@ benchmark bench-speed
   main-is:            Main.hs
   hs-source-dirs:     bench/speed
   type:               exitcode-stdio-1.0
-  build-depends:      base             >= 4.7 && < 5.0
+  build-depends:      base
+                    , bytestring
+                    , criterion
+                    , deepseq
                     , parsers-bench
   if flag(dev)
     ghc-options:      -O2 -Wall -Werror
@@ -51,7 +56,7 @@ benchmark bench-memory
   main-is:            Main.hs
   hs-source-dirs:     bench/memory
   type:               exitcode-stdio-1.0
-  build-depends:      base             >= 4.7 && < 5.0
+  build-depends:      base
                     , parsers-bench
   if flag(dev)
     ghc-options:      -O2 -Wall -Werror
