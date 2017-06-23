@@ -27,10 +27,15 @@ library
   build-depends:      base
                     , attoparsec
                     , bytestring
+                    , deepseq
                     , megaparsec
+                    , time
                     , vector
   exposed-modules:    ParsersBench.CSV.Attoparsec
                     , ParsersBench.CSV.Megaparsec
+                    , ParsersBench.Log.Attoparsec
+                    , ParsersBench.Log.Common
+                    , ParsersBench.Log.Megaparsec
   if flag(dev)
     ghc-options:      -Wall -Werror
   else

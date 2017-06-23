@@ -6,6 +6,8 @@ import Data.ByteString (ByteString)
 import qualified Data.ByteString             as B
 import qualified ParsersBench.CSV.Attoparsec as A
 import qualified ParsersBench.CSV.Megaparsec as M
+import qualified ParsersBench.Log.Attoparsec as A
+import qualified ParsersBench.Log.Megaparsec as M
 
 main :: IO ()
 main = defaultMain
@@ -13,6 +15,10 @@ main = defaultMain
     [ bparser file A.parseCSV | file <- csvFiles ]
   , bgroup "CSV (Megaparsec)"
     [ bparser file M.parseCSV | file <- csvFiles ]
+  , bgroup "Log (Attoparsec)"
+    [ bparser file A.parseLog | file <- logFiles ]
+  , bgroup "Log (Megaparsec)"
+    [ bparser file M.parseLog | file <- logFiles ]
   ]
 
 bparser :: NFData a => FilePath -> (ByteString -> a) -> Benchmark
@@ -26,3 +32,10 @@ csvFiles =
   , "csv-10.csv"
   , "csv-20.csv"
   , "csv-40.csv" ]
+
+logFiles :: [FilePath]
+logFiles =
+  [ "log-5.log"
+  , "log-10.log"
+  , "log-20.log"
+  , "log-40.log" ]
