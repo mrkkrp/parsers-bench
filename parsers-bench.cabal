@@ -29,10 +29,16 @@ library
                     , bytestring
                     , deepseq
                     , megaparsec
+                    , scientific
+                    , text
                     , time
+                    , unordered-containers
                     , vector
   exposed-modules:    ParsersBench.CSV.Attoparsec
                     , ParsersBench.CSV.Megaparsec
+                    , ParsersBench.Json.Attoparsec
+                    , ParsersBench.Json.Common
+                    , ParsersBench.Json.Megaparsec
                     , ParsersBench.Log.Attoparsec
                     , ParsersBench.Log.Common
                     , ParsersBench.Log.Megaparsec
