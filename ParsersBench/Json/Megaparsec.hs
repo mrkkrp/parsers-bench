@@ -6,6 +6,7 @@ import Control.Applicative
 import Data.ByteString (ByteString)
 import Data.Text (Text)
 import Data.Vector (Vector)
+import Data.Void
 import ParsersBench.Json.Common
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -14,7 +15,7 @@ import qualified Data.Text             as T
 import qualified Data.Vector           as V
 import qualified Text.Megaparsec.Lexer as L
 
-type Parser = Parsec Dec ByteString
+type Parser = Parsec Void ByteString
 
 parseJson :: ByteString -> Value
 parseJson bs =

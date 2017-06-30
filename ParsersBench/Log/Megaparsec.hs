@@ -5,12 +5,13 @@ where
 import Control.Monad
 import Data.ByteString (ByteString)
 import Data.Time
+import Data.Void
 import ParsersBench.Log.Common
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Lexer as L
 
-type Parser = Parsec Dec ByteString
+type Parser = Parsec Void ByteString
 
 parseLog :: ByteString -> Log
 parseLog bs =

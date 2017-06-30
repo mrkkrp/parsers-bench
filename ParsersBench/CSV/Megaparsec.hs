@@ -5,12 +5,13 @@ where
 import Control.Monad
 import Data.ByteString (ByteString)
 import Data.Vector (Vector)
+import Data.Void
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Data.ByteString.Char8 as BC8
 import qualified Data.Vector           as V
 
-type Parser = Parsec Dec ByteString
+type Parser = Parsec Void ByteString
 type Record = Vector Field
 type Field  = ByteString
 
