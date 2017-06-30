@@ -1,3 +1,6 @@
+-- Mostly stolen from (with simplifications):
+-- https://github.com/bos/attoparsec/blob/master/benchmarks/Aeson.hs
+
 {-# LANGUAGE CPP               #-}
 {-# LANGUAGE OverloadedStrings #-}
 

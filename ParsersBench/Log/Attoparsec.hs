@@ -1,3 +1,6 @@
+-- Mostly stolen from:
+-- https://www.schoolofhaskell.com/school/starting-with-haskell/libraries-and-frameworks/text-manipulation/attoparsec
+
 {-# LANGUAGE OverloadedStrings #-}
 
 module ParsersBench.Log.Attoparsec
