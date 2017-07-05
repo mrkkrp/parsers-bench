@@ -48,7 +48,7 @@ escapedField = do
   return xs
 
 unescapedField :: Parser ByteString
-unescapedField = -- BC8.pack <$!> many (noneOf ",\"\n\r")
+unescapedField =
   A.takeWhile (`notElem` (",\"\n\r" :: String))
 {-# INLINE unescapedField #-}
 

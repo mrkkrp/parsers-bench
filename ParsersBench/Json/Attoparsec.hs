@@ -94,8 +94,8 @@ value = do
     C_f           -> string "false" *> pure (Bool False)
     C_t           -> string "true" *> pure (Bool True)
     C_n           -> string "null" *> pure Null
-    _              | w >= C_0 && w <= C_9 || w == C_MINUS
-                  -> Number <$> scientific
+    _
+      | w >= C_0 && w <= C_9 || w == C_MINUS -> Number <$> scientific
       | otherwise -> fail "not a valid json value"
 
 jstring :: Parser Text
