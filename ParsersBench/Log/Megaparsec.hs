@@ -13,7 +13,7 @@ import Data.Word (Word8)
 import ParsersBench.Log.Common
 import Text.Megaparsec
 import Text.Megaparsec.Byte
-import qualified Data.ByteString as B
+import qualified Text.Megaparsec.Byte.Lexer as L
 
 type Parser = Parsec Void ByteString
 
@@ -25,13 +25,13 @@ parseLog bs =
 
 parseIP :: Parser IP
 parseIP = do
-  d1 <- decimal
+  d1 <- L.decimal
   void (char 46)
-  d2 <- decimal
+  d2 <- L.decimal
   void (char 46)
-  d3 <- decimal
+  d3 <- L.decimal
   void (char 46)
-  d4 <- decimal
+  d4 <- L.decimal
   return (IP d1 d2 d3 d4)
 
 timeParser :: Parser LocalTime
@@ -73,17 +73,4 @@ logParser = many (logEntryParser <* eol)
 
 byteToChar :: Word8 -> Char
 byteToChar = chr . fromIntegral
-
--- NOTE To be tuned for performance in Megaparec itself. Just adding this
--- here to get a picture of what sort of performance we'll have later in
--- "Text.Megaparsec.Byte.Lexer".
-
-decimal :: Integral a => Parser a
-decimal = B.foldl' step 0 `fmap` takeWhile1P (Just "digit") isDigit_w8
-  where step a w = a * 10 + fromIntegral (w - 48)
-{-# SPECIALISE decimal :: Parser Word8 #-}
-
--- | A fast digit predicate.
-isDigit_w8 :: Word8 -> Bool
-isDigit_w8 w = w - 48 <= 9
-{-# INLINE isDigit_w8 #-}
+{-# INLINE byteToChar #-}

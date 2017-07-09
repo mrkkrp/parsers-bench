@@ -3,7 +3,7 @@ packages:
 - '.'
 - location:
     git: https://github.com/mrkkrp/megaparsec.git
-    commit: 9a38f8318e5e06ccf861d0efb6f92031a9db0c49
+    commit: 214d1f2c1897bf657f52d83509d672d756b152ad
   extra-dep: true
 extra-deps:
 - parser-combinators-0.1.0

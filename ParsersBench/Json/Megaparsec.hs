@@ -1,4 +1,3 @@
-{-# LANGUAGE BangPatterns      #-}
 {-# LANGUAGE CPP               #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -7,9 +6,7 @@ module ParsersBench.Json.Megaparsec
 where
 
 import Control.Applicative
-import Control.Monad
 import Data.ByteString (ByteString)
-import Data.Scientific (Scientific)
 import Data.Text (Text)
 import Data.Vector (Vector)
 import Data.Void
@@ -17,11 +14,10 @@ import Data.Word (Word8)
 import ParsersBench.Json.Common
 import Text.Megaparsec
 import Text.Megaparsec.Byte
-import qualified Data.ByteString     as B
-import qualified Data.HashMap.Strict as H
-import qualified Data.Scientific     as Sci
-import qualified Data.Text.Encoding  as TE
-import qualified Data.Vector         as V
+import qualified Data.HashMap.Strict        as H
+import qualified Data.Text.Encoding         as TE
+import qualified Data.Vector                as V
+import qualified Text.Megaparsec.Byte.Lexer as L
 
 type Parser = Parsec Void ByteString
 
@@ -101,70 +97,13 @@ value = do
     C_t          -> Bool True  <$ string "true"
     C_n          -> string "null" *> pure Null
     _
-      | w >= C_0 && w <= C_9 || w == C_MINUS -> Number <$> scientific
-        -- TODO Pfff… need proper fast L.number from Megaparsec
+      | w >= C_0 && w <= C_9 || w == C_MINUS -> Number <$> L.scientific
       | otherwise -> fail "not a valid json value"
 
 jstring :: Parser Text
-jstring = char 34 *> jstring_
+jstring = char DOUBLE_QUOTE *> jstring_
 
 jstring_ :: Parser Text
 jstring_ = TE.decodeUtf8 <$>
-  takeWhileP (Just "string char") (/= 34) <* char 34
+  takeWhileP (Just "string char") (/= DOUBLE_QUOTE) <* char DOUBLE_QUOTE
 {-# INLINE jstring_ #-}
-
--- NOTE For now it's stolen from Attoparsec, once the optimizations for
--- numeric parsers land in Megaparsec, we'll have this performance there by
--- default.
-
-scientific :: Parser Scientific
-scientific = do
-  -- NOTE This can be done more elegantly, but for now I just want to check
-  -- if we'll be close to Attoparsec with the literal translation.
-  let minus = 45
-      plus  = 43
-  sign <- lookAhead anyChar
-  let !positive = sign == plus || sign /= minus
-  when (sign == plus || sign == minus) $
-    void anyChar
-  n <- decimal
-  let f fracDigits = SP
-        (B.foldl' step n fracDigits)
-        (negate $ B.length fracDigits)
-      step a w = a * 10 + fromIntegral (w - 48)
-  dotty <- lookAhead (optional anyChar)
-  -- '.' -> ascii 46
-  SP c e <-
-    case dotty of
-      Just 46 -> anyChar *> (f <$> takeWhileP Nothing isDigit_w8)
-      _       -> pure (SP n 0)
-
-  let !signedCoeff | positive  =  c
-                   | otherwise = -c
-
-  let littleE = 101
-      bigE    = 69
-  (satisfy (\ex -> ex == littleE || ex == bigE) *>
-      fmap (Sci.scientific signedCoeff . (e +)) (signed decimal)) <|>
-    return (Sci.scientific signedCoeff    e)
-
-signed :: Num a => Parser a -> Parser a
-{-# SPECIALISE signed :: Parser Int -> Parser Int #-}
-{-# SPECIALISE signed :: Parser Integer -> Parser Integer #-}
-signed p = (negate <$> (char 45 *> p))
-       <|> (char 43 *> p)
-       <|> p
-
--- A strict pair
-data SP = SP !Integer {-# UNPACK #-} !Int
-
-decimal :: Integral a => Parser a
-decimal = B.foldl' step 0 `fmap` takeWhile1P (Just "digit") isDigit_w8
-  where step a w = a * 10 + fromIntegral (w - 48)
-{-# SPECIALISE decimal :: Parser Word8 #-}
-{-# SPECIALISE decimal :: Parser Integer #-}
-
--- | A fast digit predicate.
-isDigit_w8 :: Word8 -> Bool
-isDigit_w8 w = w - 48 <= 9
-{-# INLINE isDigit_w8 #-}

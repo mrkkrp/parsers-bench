@@ -35,7 +35,7 @@ csv = do
 record :: Parser Record
 record = do
   notFollowedBy eof -- to prevent reading empty line at the end of file
-  V.fromList <$!> (sepBy1 field (blindByte 44) <?> "record")
+  V.fromList <$!> (sepBy1 field (char 44) <?> "record")
 
 field :: Parser Field
 field = label "field" (escapedField <|> unescapedField)
@@ -52,7 +52,3 @@ unescapedField = takeWhileP
   (Just "unescaped char")
   (`notElem` [44,34,10,13])
 {-# INLINE unescapedField #-}
-
-blindByte :: Word8 -> Parser ()
-blindByte = void . char
-{-# INLINE blindByte #-}

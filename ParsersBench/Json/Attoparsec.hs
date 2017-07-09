@@ -17,7 +17,7 @@ import Data.Word (Word8)
 import ParsersBench.Json.Common
 import qualified Data.Attoparsec.ByteString as A
 import qualified Data.HashMap.Strict        as H
-import qualified Data.Text                  as T
+import qualified Data.Text.Encoding         as TE
 import qualified Data.Vector                as V
 
 #define CLOSE_CURLY 125
@@ -101,6 +101,7 @@ value = do
 jstring :: Parser Text
 jstring = A.word8 DOUBLE_QUOTE *> jstring_
 
-jstring_ :: Parser Text -- somewhat dummy version
-jstring_ = T.pack <$> manyTill anyChar (A.word8 DOUBLE_QUOTE)
+jstring_ :: Parser Text
+jstring_ = TE.decodeUtf8 <$>
+  A.takeWhile (/= DOUBLE_QUOTE) <* A.word8 DOUBLE_QUOTE
 {-# INLINE jstring_ #-}

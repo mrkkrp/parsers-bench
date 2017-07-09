@@ -29,6 +29,7 @@ library
                     , bytestring
                     , deepseq
                     , megaparsec
+                    , parser-combinators
                     , scientific
                     , text
                     , time
