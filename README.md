@@ -8,6 +8,13 @@ is to learn how much Attoparsec is actually faster than Megaparsec for
 common parsing tasks. We do not focus on microbenchmarks here. The
 benchmarks will be used to guide design of Megaparsec 6.
 
+To generate Criterion report with stack, execute:
+
+```bash
+$ stack bench parsers-bench:bench-speed --benchmark-arguments=-oreport.html
+$ stack bench parsers-bench:bench-memory
+```
+
 ## License
 
 Copyright © 2017 Mark Karpov
