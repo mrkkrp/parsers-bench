@@ -8,7 +8,6 @@ import Control.Monad
 import Data.ByteString (ByteString)
 import Data.Vector (Vector)
 import Data.Void
-import Data.Word (Word8)
 import Text.Megaparsec
 import Text.Megaparsec.Byte
 import qualified Data.ByteString as B
