@@ -17,6 +17,6 @@ $ stack bench parsers-bench:bench-memory
 
 ## License
 
-Copyright © 2017 Mark Karpov
+Copyright © 2017–2018 Mark Karpov
 
 Distributed under BSD 3 clause license.
