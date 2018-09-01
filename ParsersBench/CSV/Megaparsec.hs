@@ -22,7 +22,7 @@ type Field  = ByteString
 parseCSV :: ByteString -> [Record]
 parseCSV bs =
   case parse csv "" bs of
-    Left err -> error (parseErrorPretty err)
+    Left err -> error (errorBundlePretty err)
     Right x -> x
 
 csv :: Parser [Record]
@@ -43,7 +43,7 @@ escapedField :: Parser ByteString
 escapedField =
   B.pack <$!> between (char 34) (char 34) (many $ normalChar <|> escapedDq)
   where
-    normalChar = notChar 34 <?> "unescaped character"
+    normalChar = anySingleBut 34 <?> "unescaped character"
     escapedDq  = label "escaped double-quote" (34 <$ string "\"\"")
 
 unescapedField :: Parser ByteString

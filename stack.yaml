@@ -1,6 +1,5 @@
-resolver: lts-10.0
+resolver: lts-12.9
 packages:
 - '.'
 extra-deps:
-- megaparsec-6.4.0
-- parser-combinators-0.4.0
+- megaparsec-7.0.1

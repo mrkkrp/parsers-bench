@@ -29,7 +29,7 @@ main = mainWith $ do
     bparser "JSON (Megaparsec)" file M.parseJson
 
 bparser :: NFData a => String -> FilePath -> (ByteString -> a) -> Weigh ()
-bparser pre desc f = io (pre ++ "/" ++ desc) m path
+bparser pre desc f = io (pre ++ "-" ++ desc) m path
   where
     path = "bench-data/" ++ desc
     m pth = f <$> B.readFile pth
