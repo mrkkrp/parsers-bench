@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: mrkkrp/haskell-ghc-8.4.2:0.1.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - stack-home-{{ checksum "stack.yaml" }}
+            - stack-home-
+      - restore_cache:
+          keys:
+            - stack-work-{{ checksum "stack.yaml" }}
+            - stack-work-
+      - run: stack setup
+      - run: stack build --flag parsers-bench:dev
+      - run: stack test
+      - save_cache:
+          key: stack-home-{{ checksum "stack.yaml" }}
+          paths: "~/.stack"
+      - save_cache:
+          key: stack-work-{{ checksum "stack.yaml" }}
+          paths: ".stack-work"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build

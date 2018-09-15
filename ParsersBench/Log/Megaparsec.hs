@@ -20,7 +20,7 @@ type Parser = Parsec Void ByteString
 parseLog :: ByteString -> Log
 parseLog bs =
   case parse logParser "" bs of
-    Left err -> error (parseErrorPretty err)
+    Left err -> error (errorBundlePretty err)
     Right x -> x
 
 parseIP :: Parser IP

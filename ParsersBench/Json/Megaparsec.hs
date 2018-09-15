@@ -38,7 +38,7 @@ type Parser = Parsec Void ByteString
 parseJson :: ByteString -> Value
 parseJson bs =
   case parse json "" bs of
-    Left err -> error (parseErrorPretty err)
+    Left err -> error (errorBundlePretty err)
     Right x -> x
 
 json :: Parser Value
@@ -73,9 +73,9 @@ arrayValues val = do
 
 commaSeparated :: Parser a -> Word8 -> Parser [a]
 commaSeparated item endByte = do
-  w <- lookAhead anyChar
+  w <- lookAhead anySingle
   if w == endByte
-    then [] <$ anyChar
+    then [] <$ anySingle
     else loop
   where
     loop = do
@@ -88,11 +88,11 @@ commaSeparated item endByte = do
 
 value :: Parser Value
 value = do
-  w <- lookAhead anyChar
+  w <- lookAhead anySingle
   case w of
-    DOUBLE_QUOTE -> anyChar *> (String <$> jstring_)
-    OPEN_CURLY   -> anyChar *> object_
-    OPEN_SQUARE  -> anyChar *> array_
+    DOUBLE_QUOTE -> anySingle *> (String <$> jstring_)
+    OPEN_CURLY   -> anySingle *> object_
+    OPEN_SQUARE  -> anySingle *> array_
     C_f          -> Bool False <$ string "false"
     C_t          -> Bool True  <$ string "true"
     C_n          -> string "null" *> pure Null
