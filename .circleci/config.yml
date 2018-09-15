@@ -14,7 +14,7 @@ jobs:
             - stack-work-{{ checksum "stack.yaml" }}
             - stack-work-
       - run: stack setup
-      - run: stack build --flag parsers-bench:dev
+      - run: stack build --bench --no-run-benchmarks --flag parsers-bench:dev
       - run: stack test
       - save_cache:
           key: stack-home-{{ checksum "stack.yaml" }}
