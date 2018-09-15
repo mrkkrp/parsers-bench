@@ -1,6 +1,7 @@
 # Parsers bench
 
 [![License BSD3](https://img.shields.io/badge/license-BSD3-brightgreen.svg)](http://opensource.org/licenses/BSD-3-Clause)
+[![CircleCI](https://circleci.com/gh/mrkkrp/parsers-bench.svg?style=svg)](https://circleci.com/gh/mrkkrp/parsers-bench)
 
 This repo contains a collection of identical parsers implemented in
 Attoparsec and Megaparsec from its current master branch. The purpose here
